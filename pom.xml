@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dl.sql</groupId>
+  <artifactId>dlsql</artifactId>
+  <name>dlsql</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <!--<version>1.0</version>-->
+  <packaging>jar</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding><!-- 文件拷贝时的编码 -->
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding><!-- 编译时的编码 -->
+  </properties>
+
+  <!-- 项目发布管理：在依赖包所在项目的 pom 文件添加如下配置 -->
+  <distributionManagement>
+    <repository>
+      <id>dl-jar-release</id>
+      <name>dl-jar-release</name>
+      <url>http://nexus.wmdgx.com/repository/dl-jar-release/</url>
+    </repository>
+
+    <snapshotRepository>
+      <id>dl-jar-hosted</id>
+      <name>dl-jar-hosted</name>
+      <url>http://nexus.wmdgx.com/repository/dl-jar-hosted/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+
+  <dependencies>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>test</id>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/test</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+
+    <profile>
+      <id>dev</id>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/test</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+
+  </profiles>
+
+  <build>
+    <plugins>
+      <!-- 指定jdk -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
