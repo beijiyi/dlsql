@@ -1,8 +1,7 @@
-package com.dl.test;
+package io.github.beijiyi.dlsql;
 
 
-import com.dl.sql.DateFormatUtil;
-import com.dl.sql.DlSqlUtil;
+import io.github.beijiyi.dlsql.DlSqlUtil;
 
 import java.util.*;
 

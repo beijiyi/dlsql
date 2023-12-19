@@ -1,8 +1,7 @@
-package com.dl;
-
-import com.dl.sql.DLDbDialectType;
-import com.dl.sql.DlSqlUtil;
-import com.dl.sql.DateFormatUtil;
+package io.github.beijiyi.dlsql;
+import io.github.beijiyi.dlsql.DLDbDialectType;
+import io.github.beijiyi.dlsql.DateFormatUtil;
+import io.github.beijiyi.dlsql.DlSqlUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
