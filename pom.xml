@@ -6,33 +6,17 @@
   <groupId>io.github.beijiyi</groupId>
   <artifactId>dlsql</artifactId>
   <name>dlsql</name>
-  <version>1.0.0</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
-  <description>对象化sql生成器主要解决简单的单表和多表查询，实现用户快速查询的需求。</description>
+  <description>对象化sql生成器，主要解决简单的单表和多表查询，实现用户快速查询需求。</description>
   <url>https://github.com/beijiyi/dlsql</url>
-  <scm>
-    <url>https://github.com/beijiyi/dlsql</url>
-    <connection>scm:git:https://github.com/beijiyi/dlsql.git</connection>
-    <developerConnection>https://github.com/beijiyi/dlsql.git</developerConnection>
-    <tag>v${project.version}</tag>
-  </scm>
   <!--项目信息结束-->
-
-  <!--开源版本信息-->
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding><!-- 文件拷贝时的编码 -->
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding><!-- 编译时的编码 -->
   </properties>
-
 
   <!-- 项目发布管理：在依赖包所在项目的 pom 文件添加如下配置 -->
   <distributionManagement>
@@ -45,18 +29,6 @@
       <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
-
-
-
-  <developers>
-    <developer>
-      <name>dl</name>
-      <email>1042040685@qq.com</email>
-      <organization>https://github.com/beijiyi/dlsql</organization>
-      <timezone>+8</timezone>
-    </developer>
-  </developers>
-
 
   <profiles>
     <profile>
@@ -88,7 +60,7 @@
   <build>
     <plugins>
 
-      <!-- sonatype插件，发布使用-->
+      <!-- sonatype插件-->
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -116,7 +88,6 @@
         </executions>
       </plugin>
 
-      <!-- 生成java doc文档 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -173,4 +144,37 @@
       </plugin>
     </plugins>
   </build>
+
+  <!--开源版本信息-->
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- 仓库信息 -->
+  <scm>
+    <connection>scm:git:https://github.com/beijiyi/dlsql</connection>
+    <developerConnection>scm:git:https://github.com/beijiyi/dlsql</developerConnection>
+    <url>https://github.com/beijiyi/dlsql</url>
+  </scm>
+
+  <!-- 开发人员信息 -->
+  <developers>
+    <developer>
+      <id>luorongda</id>
+      <name>luorongda</name>
+      <email>372049118@qq.com</email>
+      <url>https://github.com/beijiyi/dlsql</url>
+      <organization>Your Organization</organization>
+      <organizationUrl>https://github.com/beijiyi/dlsql</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>Asia/Shanghai</timezone>
+    </developer>
+  </developers>
+
 </project>

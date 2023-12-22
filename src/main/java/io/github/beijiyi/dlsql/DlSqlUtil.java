@@ -49,7 +49,7 @@ public class DlSqlUtil<T extends DlSqlUtil>{
 	private StringBuffer leftLinkWhereSql=new StringBuffer();//left join link 语句
 
 	private int leftTName=0;//当前第几个连接表
-	String[] leftNames=new String[]{"t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11"};
+	String[] leftNames=new String[]{"t1","t2","t3","t4","t5","t6","t7","t8","t9","t10"};
 
 
 	//当前操作的别名
@@ -108,14 +108,14 @@ public class DlSqlUtil<T extends DlSqlUtil>{
 			rSql=getWhereSql()+getOrderAndGroupSql();
 		}else{
 			if(Uitl.isNotEmpty(selectColumnBuffer.toString().trim())){
-				rSql+=" select "+ selectColumnBuffer.toString()+" ";	//select  列
+				rSql+=" select "+ selectColumnBuffer.toString()+" ";//select  列
 			}
-			rSql+=" from "+ fromTableBuffer.toString()+" ";		//from   表名
+			rSql+=" from "+ fromTableBuffer.toString()+" ";//from   表名
 			//left join
 			rSql+=leftSql.toString();
 			rSql+=leftLinkWhereSql.toString();
-			rSql+=getWhereSql();								//where
-			rSql+=getOrderAndGroupSql();								//order by 或 group by等
+			rSql+=getWhereSql();//where
+			rSql+=getOrderAndGroupSql();//order by 或 group by等
 		}
 
 		return rSql;
