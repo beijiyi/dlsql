@@ -1,7 +1,4 @@
 package io.github.beijiyi.dlsql;
-import io.github.beijiyi.dlsql.DLDbDialectType;
-import io.github.beijiyi.dlsql.DateFormatUtil;
-import io.github.beijiyi.dlsql.DlSqlUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,17 +16,17 @@ public class DlSqlUtilTest {
 		map.put("sr_name", value);
 		map.put("sr_remark", value);
 		map.put("sr_type", value);
-		System.out.println(DlSqlUtil.create().fromTable("sys_role").likeForMap(map).sqlAll());
+		System.out.println(Sql.create().fromTable("sys_role").likeForMap(map).sqlAll());
 
 		System.out.println("------eqForAll-------");
-		System.out.println(DlSqlUtil.create().fromTable("sys_role").eqForMap(map).sqlAll());
+		System.out.println(Sql.create().fromTable("sys_role").eqForMap(map).sqlAll());
 
 
 		System.out.println("------ge-------");
-		System.out.println(DlSqlUtil.create().ge("sr_use",1));
+		System.out.println(Sql.create().ge("sr_use",1));
 
 		System.out.println("------between-------");
-		DlSqlUtil sqlBetween=DlSqlUtil.create();
+		Sql sqlBetween= Sql.create();
 		sqlBetween.setDbType(DLDbDialectType.ORACLE);
 		sqlBetween.between("age", DateFormatUtil.StoD("2015-07-09", "yyyy-MM-dd"),DateFormatUtil.StoD("2015-07-10", "yyyy-MM-dd"));
 		System.out.println(sqlBetween);
@@ -45,6 +42,6 @@ public class DlSqlUtilTest {
 		aList.add(999);
 
 		Object[] idss={"323",23,"333","444"};
-		System.out.println(DlSqlUtil.create().in("name",idss));
+		System.out.println(Sql.create().in("name",idss));
 	}
 }

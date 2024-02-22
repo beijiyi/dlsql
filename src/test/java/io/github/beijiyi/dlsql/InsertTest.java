@@ -1,7 +1,5 @@
 package io.github.beijiyi.dlsql;
 
-import io.github.beijiyi.dlsql.DlSqlUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ public class InsertTest {
         map.put("t2", value);
 
 
-        DlSqlUtil insert=DlSqlUtil.create();
+        Sql insert= Sql.create();
         insert.fromTable("demo_test");
         insert.insertValue(map);
         System.out.println(insert.sqlInsert());

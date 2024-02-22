@@ -1,7 +1,5 @@
 package io.github.beijiyi.dlsql;
 
-import io.github.beijiyi.dlsql.DlSqlUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ public class DeleteTest {
         map.put("val2", value);
 
 
-        DlSqlUtil delete =DlSqlUtil.create();
+        Sql delete = Sql.create();
         delete.fromTable("demo_test");
             delete.eq("id",1);
             delete.or();

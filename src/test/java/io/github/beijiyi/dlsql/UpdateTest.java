@@ -1,7 +1,5 @@
 package io.github.beijiyi.dlsql;
 
-import io.github.beijiyi.dlsql.DlSqlUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ public class UpdateTest {
         map.put("t2", value);
 
 
-        DlSqlUtil update =DlSqlUtil.create();
+        Sql update = Sql.create();
         update.fromTable("demo_test");
         update.updateSet(map);
         update.eq("id",1);

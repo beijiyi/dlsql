@@ -6,7 +6,7 @@
   <groupId>io.github.beijiyi</groupId>
   <artifactId>dlsql</artifactId>
   <name>dlsql</name>
-  <version>1.0.3</version>
+  <version>1.0.10</version>
   <packaging>jar</packaging>
   <description>对象化sql生成器，主要解决简单的单表和多表查询，实现用户快速查询需求。</description>
   <url>https://github.com/beijiyi/dlsql</url>
