@@ -8,52 +8,6 @@ import java.util.*;
  */
 public class SelectTest {
 
-    public static  void temSql(){
-        AsList asList =new AsList()
-                .set(0,"ot")
-                .set(1,"slvm")
-                .set(2,"som")
-                .set(3,"st")
-        ;
-        Sql sql= Sql.db(0, asList);
-
-        //返回字段
-        sql.tno().select("*");
-        sql.t2().select("som_zzqk");
-        sql.t1().select("lvm_low_voltage_status");
-
-
-        sql.selectSql("appeal_num",
-            Sql.db(0,new AsList().set(0,"sdpsq").set(1,"ot"))
-            .selectPlain("count(*)")
-            .fromTable("sc_demand_power_supply_quality")
-            .f2tPrefix()
-            .t1()
-            .eq("trans_gis_id","sc_gisid")
-            .f2tDefault()
-            .t0()
-            .between("sc_appeal_time","2023-12-02 00:00:00","2024-01-02 23:59:59")
-            .sqlAll()
-        );
-        sql.fromTable("org_transformer");//主表
-        sql.leftwhere();
-        sql.t0();
-        sql.leftJoinTable("sc_low_voltage_manage").link("lvm_transformer_gisId","trans_gis_id");
-        sql.leftJoinTable("sc_overload_manage").link("som_gisId","trans_gis_id");
-        sql.leftJoinTable("sc_tqfg").link("tqfg_gisId","trans_gis_id").between("tqfg_tbrq","2023-01-01","2024-01-01");
-
-        sql.where().eq("trans_assert_type","公变");
-        sql.in("trans_gis_id","378010542681801","378010323699401","378010542380801","378010542839901","378010544854301","378010434079501","378010323711201","378010545804301","378010542822001","378010541920001","378010323763201","378010544797501","378010542679701","378010545285001","378010542752601");
-        sql.having().tno().eq("appeal_num",1);
-        sql.tno().orderByDesc("appeal_num");
-
-        System.out.println(sql.sqlAll());
-
-
-
-    }
-
-
     /**
      * 单表查询
      */
@@ -153,7 +107,7 @@ public class SelectTest {
 //        System.out.println("------------------");
 //        basicTable(map);
 //        System.out.println("------------------");
-        temSql();
+//        temSql();
 //        System.out.println("------------------");
 //        oneTableSelect();
 
