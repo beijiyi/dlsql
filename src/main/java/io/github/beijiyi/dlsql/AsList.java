@@ -2,6 +2,7 @@ package io.github.beijiyi.dlsql;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 表信息类
@@ -9,10 +10,12 @@ import java.util.List;
  * 2.别名和序号是必须的，表名是非必须的。
  * 3.只要创建实例就会默认给出t1..tn的别名
  */
-public class AsTableNames {
+public class AsList {
     private List<TableAlias> tableAliases;
+    private static final char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static final Random random = new Random();
 
-    public AsTableNames() {
+    public AsList() {
         this.tableAliases = new ArrayList<>();
         add(new TableAlias("t1"));
         add(new TableAlias("t2"));
@@ -50,11 +53,33 @@ public class AsTableNames {
     }
 
     /**
+     * 获取别名前缀
+     * @return
+     */
+    public static String randomGetAsPrefix(){
+        int randomIndex = random.nextInt(chars.length);
+        return String.valueOf(chars[randomIndex]);
+    }
+
+    /**
+     * 获取指定位数的字母随机数
+     * @return
+     */
+    public static  String randomGetAlias(int num){
+        StringBuilder aliasBuilder = new StringBuilder();
+        for (int i = 0; i < num; i++) {
+            char randomChar = chars[random.nextInt(chars.length)];
+            aliasBuilder.append(randomChar);
+        }
+        return aliasBuilder.toString();
+    }
+
+    /**
      * 自定义别名
      * @param i
      * @param asName
      */
-    public  AsTableNames  set(int i,String asName){
+    public AsList set(int i, String asName){
        if(tableAliases.size()<=i)return this;//确保下标存在
 
        TableAlias tableAlias= this.tableAliases.get(i);
@@ -126,12 +151,21 @@ public class AsTableNames {
             this.alias = alias;
         }
 
+
+        public String getAlias() {
+            return alias;
+        }
+
+        public void setAlias(String alias) {
+            this.alias = alias;
+        }
+
         public String getTableName() {
             return tableName;
         }
 
-        public String getAlias() {
-            return alias;
+        public void setTableName(String tableName) {
+            this.tableName = tableName;
         }
     }
 }

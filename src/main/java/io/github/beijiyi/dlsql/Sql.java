@@ -1,6 +1,5 @@
 package io.github.beijiyi.dlsql;
 
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -36,41 +35,41 @@ import java.util.*;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Sql<T extends Sql>{
-	private static String DB_TYPE= DLDbDialectType.MYSQL;//数据库类型
+	protected static String DB_TYPE= DLDbDialectType.MYSQL;//数据库类型
 
-	private StringBuffer fromTableBuffer=new StringBuffer();//(2) 主表的定义
-	private StringBuffer selectColumnBuffer=new StringBuffer();//本次查询返回列 (1) 列的定义（可能是子查询）
+	protected StringBuffer fromTableBuffer=new StringBuffer();//(2) 主表的定义
+	protected StringBuffer selectColumnBuffer=new StringBuffer();//本次查询返回列 (1) 列的定义（可能是子查询）
 
 
 
-	private StringBuffer groupSqlSql=new StringBuffer();//group部分的sql
-	private StringBuffer orderbySql=new StringBuffer();//orderby部分的sql
+	protected StringBuffer groupSqlSql=new StringBuffer();//group部分的sql
+	protected StringBuffer orderbySql=new StringBuffer();//orderby部分的sql
 
 	/**
 	 * 对于没有子查询的情况下，一共有三种查询条件片段，分别为：1.whereSql;2.leftLinkWhereSql;3.havingSql
 	 *
 	 */
-	private StringBuffer whereSql=new StringBuffer();//where部分的sql
+	protected StringBuffer whereSql=new StringBuffer();//where部分的sql
 //	private StringBuffer leftWhereSql =new StringBuffer();//left join link 语句
-	private List<StringBuffer> leftSqls=new ArrayList<>();//所有关联语句，包含查询条件
-	private StringBuffer havingSql=new StringBuffer();//having子句
+	protected List<StringBuffer> leftSqls=new ArrayList<>();//所有关联语句，包含查询条件
+	protected StringBuffer havingSql=new StringBuffer();//having子句
 
-	private List<SqlParam> paramList=new ArrayList<>();//参数
+	protected List<SqlParam> paramList=new ArrayList<>();//参数
 
-	private StringBuffer insertSql=new StringBuffer();//插入sql   例子：(key1,key2,key3) values(value1,value2,value3) 或 (key1,key2,key3) values(?,?,?)
-	private StringBuffer updateSql=new StringBuffer();//插入sql   例子：(key1,key2,key3) values(value1,value2,value3) 或 (key1,key2,key3) values(?,?,?)
+	protected StringBuffer insertSql=new StringBuffer();//插入sql   例子：(key1,key2,key3) values(value1,value2,value3) 或 (key1,key2,key3) values(?,?,?)
+	protected StringBuffer updateSql=new StringBuffer();//插入sql   例子：(key1,key2,key3) values(value1,value2,value3) 或 (key1,key2,key3) values(?,?,?)
 
 
-	private String WHERE_SQL_TYPE=SqlConstants.SQL_TYPE_WHERE;//当前构建的sql条件类型  三种 1.whereSql;2.leftLinkWhereSql;3.havingSql
-	private int linkTableIndex =0;//当前操作的表位置标记[默认是主表]  -1 时表示不使用别名
+	protected String WHERE_SQL_TYPE=SqlConstants.SQL_TYPE_WHERE;//当前构建的sql条件类型  三种 1.whereSql;2.leftLinkWhereSql;3.havingSql
+	protected int linkTableIndex =0;//当前操作的表位置标记[默认是主表]  -1 时表示不使用别名
 
-	private String linkWay=SqlConstants.LINK_WAY_TYPE_AND;//条件之间的链接符号  and  或  or  默认为and
-	private int linkField1Type=SqlConstants.LINK_FIELD1_DEFAULT;//默认为带前缀的字段名称
-	private int linkField2Type=SqlConstants.LINK_FIELD2_DEFAULT;//默认为格式化内容（例如，name='张三'中的  '张三')
+	protected String linkWay=SqlConstants.LINK_WAY_TYPE_AND;//条件之间的链接符号  and  或  or  默认为and
+	protected int linkField1Type=SqlConstants.LINK_FIELD1_DEFAULT;//默认为带前缀的字段名称
+	protected int linkField2Type=SqlConstants.LINK_FIELD2_DEFAULT;//默认为格式化内容（例如，name='张三'中的  '张三')
 
-	private int linkMainTableIndex=0;//主表标记，在多表查询中，目前的设计是采用子查询方式，主表标记不一定是第一个，需要整体考虑，提前设置。
+	protected int linkMainTableIndex=0;//主表标记，在多表查询中，目前的设计是采用子查询方式，主表标记不一定是第一个，需要整体考虑，提前设置。
 
-	private AsTableNames asTableNames;//表名及别名
+	protected AsList asList;//表名及别名
 
 
 
@@ -102,7 +101,7 @@ public class Sql<T extends Sql>{
 	 * @return
 	 */
 	public static Sql db(){
-		return db(0,new AsTableNames());
+		return db(0,new AsList());
 	}
 
 //	/**
@@ -118,15 +117,32 @@ public class Sql<T extends Sql>{
 	 * 获取一个新的sql。
 	 * 每次调用此方法都会先清空一次sql语句。
 	 * @param mainTableIndex		主表下标
-	 * @param asTableNames			别名管理对象
+	 * @param asList			别名管理对象
 	 * @return
 	 */
-	public  static  Sql db(int mainTableIndex,AsTableNames asTableNames){
+	public  static  Sql db(int mainTableIndex, AsList asList){
 		Sql sql=new Sql();
 		sql.linkMainTableIndex=mainTableIndex;
-		sql.asTableNames=asTableNames;
+		sql.asList = asList;
 		return  sql;
 	}
+
+	/**
+	 * 使用随机别名
+	 *
+	 * 应用场景：在子查询与主查询毫不相关时使用，避免别名重复导致语义不明
+	 * @return
+	 */
+	public T rAs(int i){
+		List<AsList.TableAlias> aliases= asList.getAll();
+		String prefix=AsList.randomGetAsPrefix();//别名前缀
+		String as=AsList.randomGetAlias(2);
+		for (int i1 = 0; i1 < aliases.size(); i1++) {
+			asList.set(i1,prefix+"_"+i+as+i1);
+		}
+		return (T)this;
+	}
+
 //	/**
 //	 获取一个新的sql。
 //	 * 每次调用此方法都会先清空一次sql语句。
@@ -153,7 +169,7 @@ public class Sql<T extends Sql>{
 	 * @return
 	 */
 	private String getMainTableAsName(){
-		return  this.asTableNames.getAlias(linkMainTableIndex);
+		return  this.asList.getAlias(linkMainTableIndex);
 	}
 
 
@@ -246,7 +262,7 @@ public class Sql<T extends Sql>{
 			rSql.append(" select "+ selectColumnBuffer.toString()+" ");//select  列
 		}
 //2.处理表名
-		rSql.append(" from "+ fromTableBuffer.toString()+" ");//from   表名
+		rSql.append(" from "+ fromTableBuffer.toString()+" "+ getMainTableAsName()+" ");//from   表名
 //3.处理连接表   左右内连接及查询条件
 		StringBuffer finalRSql = rSql;
 		leftSqls.forEach(o->{
@@ -294,7 +310,11 @@ public class Sql<T extends Sql>{
 	 * @return
 	 */
 	public Object[] paramArrs(){
-		return  paramList.toArray();
+		List<Object> a=new ArrayList<>();
+		paramList.forEach(o->{
+			a.add(o.value);
+		});
+		return  a.toArray();
 	}
 
 	/**
@@ -305,7 +325,7 @@ public class Sql<T extends Sql>{
 	public T select(String... column){
 		if(column==null||column.length<=0)return (T)this;//为空或没有传入参数直接返回。
 
-		String prefix=linkTableIndex==-1?"":this.asTableNames.get(linkTableIndex).getAlias()+".";
+		String prefix=linkTableIndex==-1?"":this.asList.get(linkTableIndex).getAlias()+".";
 
 		for (String s : column) {
 			if(this.selectColumnBuffer.length()>0){//已有条件
@@ -322,7 +342,7 @@ public class Sql<T extends Sql>{
 	 * 保留多个返回字段(字段原样输出)
 	 * @return
 	 */
-	public T selectOriginal(String... column){
+	public T selectPlain(String... column){
 		int i=linkTableIndex;
 		t0();
 		select(column);
@@ -366,7 +386,7 @@ public class Sql<T extends Sql>{
 		if(Uitl.isEmpty(tables)||tables.trim().equals("")){
 			return (T)this;
 		}
-		fromTableBuffer=new StringBuffer(tables+ " "+ getMainTableAsName()+" ");
+		fromTableBuffer=new StringBuffer(tables);
 		return (T)this;
 	}
 
@@ -398,7 +418,7 @@ public class Sql<T extends Sql>{
 		++linkTableIndex;//当前操作表标记加1
 		if(linkTableIndex==linkMainTableIndex)++linkTableIndex;//(需要避开主表，其他还是按顺序递进）
 		StringBuffer left=new StringBuffer();
-		left.append(" left join "+tableName  +"  " + this.asTableNames.get(linkTableIndex).getAlias());
+		left.append(" left join "+tableName  +"  " + this.asList.get(linkTableIndex).getAlias());
 		leftSqls.add(left);
 		return (T)this;
 	}
@@ -430,18 +450,8 @@ public class Sql<T extends Sql>{
 	public  T link(String field1,String field2){
 		StringBuffer sql=getSqlByType();
 
-//		if(SqlConstants.SQL_TYPE_WHERE.equals(WHERE_SQL_TYPE)){//添加在主条件中
-//
-//		}else if(SqlConstants.SQL_TYPE_LEFT.equals(WHERE_SQL_TYPE)){//左右内外关联条件中
-//			if(!leftSqls.isEmpty()){
-//
-//			}
-//		}else if(SqlConstants.SQL_TYPE_HAVING.equals(WHERE_SQL_TYPE)){//havingSql条件中
-//		}
-
-
 		StringBuffer leftSql=leftSqls.get(leftSqls.size()-1);//获取当前操作表标记的对象
-		leftSql.append(" on "+ getMainTableAsName()+"."+field1+"="+ this.asTableNames.getAlias(linkTableIndex)+"."+field2+" ");
+		leftSql.append(" on "+ getMainTableAsName()+"."+field1+"="+ this.asList.getAlias(linkTableIndex)+"."+field2+" ");
 		return (T)this;
 	}
 
@@ -845,7 +855,7 @@ public class Sql<T extends Sql>{
 	 */
 	public String unitFormat(Object value){
 		if(linkField2Type==SqlConstants.LINK_FIELD2_PREFIX){//带前缀的字段
-			String s=this.asTableNames.getAlias(linkMainTableIndex)+ "."+value;//第二个字段默认为主表字段
+			String s=this.asList.getAlias(linkMainTableIndex)+ "."+value;//第二个字段默认为主表字段
 			value=s;
 		}
 
@@ -874,7 +884,7 @@ public class Sql<T extends Sql>{
 			if(linkTableIndex==-1){//不需要前缀（字段是动态产生的)
 				ret=propertyName;
 			}else{//需要前缀
-				ret=this.asTableNames.getAlias(linkTableIndex)+ "."+propertyName;//使用的是当前操作表作为前缀
+				ret=this.asList.getAlias(linkTableIndex)+ "."+propertyName;//使用的是当前操作表作为前缀
 			}
 		}else{//原样输出
 			ret=propertyName;
@@ -902,11 +912,13 @@ public class Sql<T extends Sql>{
 
 	/**
 	 * 给现有查询条件增加新的链接项目
-	 * @param sqlItem
+	 * @param sqlItem	已生成好的条件sql段
 	 * @return
 	 */
 	public T addQueryItem(String sqlItem){
 		StringBuffer sql=getSqlByType();
+
+		if(Uitl.isEmpty(sqlItem))return (T)this;//条件为空直接返回
 
 		//情况一，sql为空
 		if(Uitl.isEmpty(sql.toString())){
@@ -1291,9 +1303,9 @@ public class Sql<T extends Sql>{
 
 		for (String s : column) {
 			if(this.groupSqlSql.indexOf("group by")!=-1){//还没有任何字段
-				this.groupSqlSql.append(linkTableIndex==-1?s:this.asTableNames.getAlias(linkTableIndex)+"."+s);
+				this.groupSqlSql.append(linkTableIndex==-1?s:this.asList.getAlias(linkTableIndex)+"."+s);
 			}else{//已有字段
-				this.groupSqlSql.append(","+(linkTableIndex==-1?s:this.asTableNames.getAlias(linkTableIndex)+"."+s));
+				this.groupSqlSql.append(","+(linkTableIndex==-1?s:this.asList.getAlias(linkTableIndex)+"."+s));
 			}
 		}
 
@@ -1622,7 +1634,18 @@ public class Sql<T extends Sql>{
 		in(propertyName, value.toArray());
 		return (T)this;
 	}
-	
+
+	/**
+	 * 根据sql使用in查询
+	 * @param propertyName
+	 * @param sql
+	 * @return
+	 */
+	public T inSql(String propertyName,String sql){
+		addQueryItem(unitFormatPropertyName(propertyName)+" in ("+sql+") ");
+		return (T)this;
+	}
+
 	/**
 	 * isNUll	是为null
 	 * @return

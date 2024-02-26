@@ -9,13 +9,13 @@ import java.util.*;
 public class SelectTest {
 
     public static  void temSql(){
-        AsTableNames asTableNames=new AsTableNames()
+        AsList asList =new AsList()
                 .set(0,"ot")
                 .set(1,"slvm")
                 .set(2,"som")
                 .set(3,"st")
         ;
-        Sql sql= Sql.db(0,asTableNames);
+        Sql sql= Sql.db(0, asList);
 
         //返回字段
         sql.t0().select("*");
@@ -24,8 +24,8 @@ public class SelectTest {
 
 
         sql.selectSql("appeal_num",
-            Sql.db(0,new AsTableNames().set(0,"sdpsq").set(1,"ot"))
-            .selectOriginal("count(*)")
+            Sql.db(0,new AsList().set(0,"sdpsq").set(1,"ot"))
+            .selectPlain("count(*)")
             .fromTable("sc_demand_power_supply_quality")
             .f2tPrefix()
             .t2()
