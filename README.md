@@ -35,7 +35,7 @@ Sql.db().fromTable("employees")
 > jfinal深度结合
 ```java
 Employees.db().in(Employees.T.femployee_name,)
-    .eq(Employees.T.fdepartment_id,"张三","李四")
+    .in(Employees.T.fdepartment_id,"张三","李四")
     .eq(Employees.T.fdepartment_id,1001)
     .gt(Employees.T.fsalary,5000)
     .having().gt(Employees.T.femployee_id,10)
@@ -79,7 +79,7 @@ Sql.db(1,new AsList().set(0,"e").set(1,"d")).fromTable("employees")
                             .fromTable("employees")
                             .select("department_id")
                             .f2tPrefix()
-                            .eq("employee_id","department_id")//第一个字段是主表字段、第二个字段是当前表字段
+                            .eq("department_id","employee_id")//第一个字段是当前表字段、第二个字段是主表字段
                             .sqlAll()
                 )
 ```
