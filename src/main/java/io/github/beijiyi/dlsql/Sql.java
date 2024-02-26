@@ -127,6 +127,22 @@ public class Sql<T extends Sql>{
 		return  sql;
 	}
 
+	public T as(Integer mainTableIndex, AsList asList){
+		if(mainTableIndex!=null)this.linkMainTableIndex=mainTableIndex;
+		if(asList!=null)this.asList = asList;
+		return (T)this;
+	}
+
+	public T as(AsList asList){
+		as(null,asList);
+		return (T)this;
+	}
+
+	public T as(Integer mainTableIndex){
+		as(mainTableIndex,null);
+		return (T)this;
+	}
+
 	/**
 	 * 使用随机别名
 	 *

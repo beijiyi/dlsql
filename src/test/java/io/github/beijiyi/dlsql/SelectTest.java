@@ -143,18 +143,43 @@ public class SelectTest {
     }
 
     public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        String value = "查询";
-        map.put("sr_name", value);
-        map.put("sr_remark", value);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        String value = "查询";
+//        map.put("sr_name", value);
+//        map.put("sr_remark", value);
+//
+//        System.out.println("------------------");
+//        testMultipleTable();
+//        System.out.println("------------------");
+//        basicTable(map);
+//        System.out.println("------------------");
+//        temSql();
+//        System.out.println("------------------");
+//        oneTableSelect();
 
-        System.out.println("------------------");
-        testMultipleTable();
-        System.out.println("------------------");
-        basicTable(map);
-        System.out.println("------------------");
-        temSql();
-        System.out.println("------------------");
-        oneTableSelect();
+
+        String sql= Sql.db().fromTable("employees")
+                .in("employee_name","张三","李四")
+                .eq("department_id ",1001)
+                .gt("salary",5000)
+                .having().gt("employee_id",10)
+                .orderByDesc("salary").sqlAll();
+        System.out.println(sql);
+
+
+        String sql2= Sql.db(1,new AsList().set(0,"e").set(1,"d")).fromTable("employees")
+                .select("employee_id","employee_name","department_name")
+                .leftJoinTable("departments").link("department_id")
+                .inSql("employee_id",
+                    Sql.db(1,new AsList().set(0,"ee").set(1,"e"))
+                            .fromTable("employees")
+                            .select("department_id")
+                            .f2tPrefix()
+                            .eq("employee_id","department_id")
+                            .sqlAll()
+                )
+                .sqlAll();
+        System.out.println(sql2);
+
     }
 }
