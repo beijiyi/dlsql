@@ -6,6 +6,12 @@ package io.github.beijiyi.dlsql;
  * 常量类
  */
 public class SqlConstants{
+	/**
+	 * 查询类型目前分三类
+	 * 第一类是where中的查询条件
+	 * 第二类是关联表中的查询条件（左右关联)
+	 * 第三类是having中的查询条件
+	 */
 	public static final String SQL_TYPE_WHERE = "whereSql";
 	public static final String SQL_TYPE_LEFT = "leftWhereSql";
 	public static final String SQL_TYPE_HAVING = "havingSql";

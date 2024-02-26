@@ -149,7 +149,7 @@ public class Sql<T extends Sql>{
 	 * 应用场景：在子查询与主查询毫不相关时使用，避免别名重复导致语义不明
 	 * @return
 	 */
-	public T rAs(int i){
+	public T asR(int i){
 		List<AsList.TableAlias> aliases= asList.getAll();
 		String prefix=AsList.randomGetAsPrefix();//别名前缀
 		String as=AsList.randomGetAlias(2);
@@ -159,26 +159,6 @@ public class Sql<T extends Sql>{
 		return (T)this;
 	}
 
-//	/**
-//	 获取一个新的sql。
-//	 * 每次调用此方法都会先清空一次sql语句。
-//	 * @param mainTableIndex		主表位置下标
-//	 * @param asTableName			别名集合
-//	 * @return
-//	 */
-//	public static Sql db(int mainTableIndex, String... asTableName){
-//		Sql sql=create();
-//		sql.linkMainTableIndex=mainTableIndex;
-//
-////		if(asTableName!=null&&asTableName.length>0){
-////			sql.linkTableAsNames[mainTableIndex]=asTableName[0];//主表
-////			for (int i = 0; i < asTableName.length; i++) {
-////				sql.linkTableAsNames[i]=asTableName[i];
-////			}
-////		}
-//
-//		return sql;
-//	}
 
 	/**
 	 * 获得主表别名
@@ -360,7 +340,7 @@ public class Sql<T extends Sql>{
 	 */
 	public T selectPlain(String... column){
 		int i=linkTableIndex;
-		t0();
+		tno();
 		select(column);
 		t(i);
 		return (T)this;
@@ -461,13 +441,11 @@ public class Sql<T extends Sql>{
 	/**
 	 * 左右内关联时两张表之间的连接字段
 	 * 当字段在两张表中一样时，位置没有区别。
-	 * 当字段在两张表中不同时，第一个字段必须是主表字段
+	 * 当字段在两张表中不同时，第二个字段必须是主表字段
 	 */
 	public  T link(String field1,String field2){
-		StringBuffer sql=getSqlByType();
-
 		StringBuffer leftSql=leftSqls.get(leftSqls.size()-1);//获取当前操作表标记的对象
-		leftSql.append(" on "+ getMainTableAsName()+"."+field1+"="+ this.asList.getAlias(linkTableIndex)+"."+field2+" ");
+		leftSql.append(" on "+ this.asList.getAlias(linkTableIndex)+"."+field1+"="+ getMainTableAsName()+"."+field2+" ");
 		return (T)this;
 	}
 
@@ -485,100 +463,42 @@ public class Sql<T extends Sql>{
 	 * @param i
 	 * @return
 	 */
-	public T t(int i){
-		linkTableIndex=i;
-		return (T)this;
-	}
-
+	public T t(int i){linkTableIndex=i;return (T)this;}
 	/**
 	 * 不使用前缀
 	 * @return
 	 */
-	public T t0(){
-		linkTableIndex=-1;
-		return (T)this;
-	}
+	public T tno(){linkTableIndex=-1;return (T)this;}
 
-	public T t1(){
-		linkTableIndex=0;
-		return (T)this;
-	}
-	public T t2(){
-		linkTableIndex=1;
-		return (T)this;
-	}
-	public T t3(){
-		linkTableIndex=2;
-		return (T)this;
-	}
-	public T t4(){
-		linkTableIndex=3;
-		return (T)this;
-	}
-	public T t5(){
-		linkTableIndex=4;
-		return (T)this;
-	}
-	public T t6(){
-		linkTableIndex=5;
-		return (T)this;
-	}
-	public T t7(){
-		linkTableIndex=6;
-		return (T)this;
-	}
-	public T t8(){
-		linkTableIndex=7;
-		return (T)this;
-	}
-	public T t9(){
-		linkTableIndex=8;
-		return (T)this;
-	}
-	public T t10(){
-		linkTableIndex=9;
-		return (T)this;
-	}
-
-//	/**
-//	 * 设置1到10个表的别名（在复杂sql中灵活使用)
-//	 * @param asTableName
-//	 * @return
-//	 */
-//	public T setT1(String asTableName){
-//		linkTableAsNames[0]=asTableName;return (T)this;}
-//	public T setT2(String asTableName){
-//		linkTableAsNames[1]=asTableName;return (T)this;}
-//	public T setT3(String asTableName){
-//		linkTableAsNames[2]=asTableName;return (T)this;}
-//	public T setT4(String asTableName){
-//		linkTableAsNames[3]=asTableName;return (T)this;}
-//	public T setT5(String asTableName){
-//		linkTableAsNames[4]=asTableName;return (T)this;}
-//	public T setT6(String asTableName){
-//		linkTableAsNames[5]=asTableName;return (T)this;}
-//	public T setT7(String asTableName){
-//		linkTableAsNames[6]=asTableName;return (T)this;}
-//	public T setT8(String asTableName){
-//		linkTableAsNames[7]=asTableName;return (T)this;}
-//	public T setT9(String asTableName){
-//		linkTableAsNames[8]=asTableName;return (T)this;}
-//	public T setT10(String asTableName){
-//		linkTableAsNames[9]=asTableName;return (T)this;}
-//
-//	/**
-//	 * 设置1到10个表的别名（在复杂sql中灵活使用)
-//	 * @param tableasName
-//	 * @return
-//	 */
-//	public T setTAsName(String... tableasName){
-//		if(Uitl.isEmpty(tableasName))return (T)this;
-//		int a=0;
-//		for (String string : tableasName) {
-//			if(a< linkTableAsNames.length) linkTableAsNames[a]=string;
-//		}
-//		return (T)this;
-//	}
+	/**
+	 * 设置当前操作表为第一个1
+	 * @return
+	 */
+	public T t0(){linkTableIndex=0;return (T)this;}
+	public T t1(){linkTableIndex=1;return (T)this;}
+	public T t2(){linkTableIndex=2;return (T)this;}
+	public T t3(){linkTableIndex=3;return (T)this;}
+	public T t4(){linkTableIndex=4;return (T)this;}
+	public T t5(){linkTableIndex=5;return (T)this;}
+	public T t6(){linkTableIndex=6;return (T)this;}
+	public T t7(){linkTableIndex=7;return (T)this;}
+	public T t8(){linkTableIndex=8;return (T)this;}
+	public T t9(){linkTableIndex=9;return (T)this;}
+	public T t10(){linkTableIndex=10;return (T)this;}
+	public T t11(){linkTableIndex=11;return (T)this;}
+	public T t12(){linkTableIndex=12;return (T)this;}
+	public T t13(){linkTableIndex=13;return (T)this;}
+	public T t14(){linkTableIndex=14;return (T)this;}
+	public T t15(){linkTableIndex=15;return (T)this;}
+	public T t16(){linkTableIndex=16;return (T)this;}
+	public T t17(){linkTableIndex=17;return (T)this;}
+	public T t18(){linkTableIndex=18;return (T)this;}
+	public T t19(){linkTableIndex=19;return (T)this;}
+	public T t20(){linkTableIndex=20;return (T)this;}
+	public T t21(){linkTableIndex=21;return (T)this;}
+	public T t22(){linkTableIndex=22;return (T)this;}
+	public T t23(){linkTableIndex=23;return (T)this;}
+	public T t24(){linkTableIndex=24;return (T)this;}
 
 	/**
 	 * 设置条件类型
@@ -616,6 +536,7 @@ public class Sql<T extends Sql>{
 		WHERE_SQL_TYPE=SqlConstants.SQL_TYPE_LEFT;
 		return (T)this;
 	}
+
 	/**
 	 * 第一个字段格式化模式设置
 	 * @param type
@@ -680,7 +601,7 @@ public class Sql<T extends Sql>{
 	}
 
 	/**
-	 *
+	 * 获取当前查询条件的类型
 	 * @return
 	 */
 	private StringBuffer getSqlByType(){
@@ -695,29 +616,6 @@ public class Sql<T extends Sql>{
 		return null;
 	}
 
-//	/**
-//	 * 自动判断where语句，如果没有and或or结束，则添加and作为连接
-//	 * @return
-//	 */
-//	public T andAuto(){
-//		StringBuffer whereSql=getSqlByType();
-//		if(whereSql==null)return (T)this;
-//
-//		String sql=whereSql.toString().trim().toLowerCase();
-//		if(Uitl.isEmpty(sql)){//还没有条件，不需要添加任何连接词【没有意义】
-//			return (T)this;
-//		}
-//
-//		//根据现有条件字符串判断是否需要添加and条件
-//		if(sql.endsWith("or")||sql.endsWith("and")||sql.endsWith("(")||sql.endsWith("where")){//是以and或or结束的。【可能是调用了and()或or()方法】
-//			//保持原来的语义
-//			return (T)this;
-//		}
-//
-//		whereSql.append(" and ");//通过检查，添加and连接词
-//		return (T)this;
-//	}
-
 	/**
 	 * 添加条件sql后缀的and
 	 * @return
@@ -727,44 +625,12 @@ public class Sql<T extends Sql>{
 		return (T)this;
 	}
 
-//	/**
-//	 * 自动判断where语句，如果没有and或or结束，则添加or作为连接
-//	 * @return
-//	 */
-//	public T orAuto(){
-//		StringBuffer whereSql=getSqlByType();
-//		if(whereSql==null)return (T)this;
-//
-//		String sql=whereSql.toString().trim().toLowerCase();
-//		if(Uitl.isEmpty(sql)){//还没有条件，不需要添加任何连接词【没有意义】
-//			return (T)this;
-//		}
-//
-//		if(sql.endsWith("or")||sql.endsWith("and")){//是以and或or结束的。【可能是调用了and()或or()方法】
-//			//保持原来的语义
-//			return (T)this;
-//		}
-//
-//		whereSql.append(" or ");//通过检查，添加and连接词
-//		return (T)this;
-//	}
-
 	/**
 	 * 添加or连接符
 	 * @return
 	 */
 	public  T or(){
 		linkWay=SqlConstants.LINK_WAY_TYPE_OR;
-//		StringBuffer whereSql=getSqlByType();
-//		if(whereSql==null)return (T)this;
-//
-//		String sql=whereSql.toString().trim();
-//		if(Uitl.isNotEmpty(sql)&&!sql.endsWith("or")){//当前sql 不为空，并且不是以or 或and 结束
-//			if(sql.endsWith("and")){
-//				sql=sql.substring(0, sql.length()-3);
-//			}
-//			whereSql.append(" or ");
-//		}
 		return (T)this;
 	}
 
@@ -950,68 +816,6 @@ public class Sql<T extends Sql>{
 		return (T)this;
 	}
 
-//	/**
-//	 * 检查当前条件部分sql，是否需要去掉and或or
-//	 * @return
-//	 */
-//	public T delEndAndOr() {
-//		return this.delEndAndOr(null);
-//	}
-//
-//	/**
-//	 *  检查当前条件部分sql，是否需要去掉and或or
-//	 * @return
-//	 */
-//	public T delEndAndOr(String retTerm){
-//		delEndAndOr(WHERE_SQL_TYPE,retTerm);
-//		return (T)this;
-//	}
-//
-//	/**
-//	 * 检查当前条件部分sql，是否需要去掉and或or
-//	 * @return
-//	 */
-//	public T delEndAndOr(String type,String retTerm){
-//		if(SqlConstants.SQL_TYPE_WHERE.equals(type)){//添加在主条件中
-//			delEndAndOr(this.whereSql,retTerm);
-//		}else if(SqlConstants.SQL_TYPE_LEFT.equals(type)){//左右内外关联条件中
-//			delEndAndOr(leftSqls.get(leftSqls.size()-1),retTerm);//获取当前操作的关联表进行拼接查询条件
-//		}else if(SqlConstants.SQL_TYPE_HAVING.equals(type)){//havingSql条件中
-//			delEndAndOr(this.havingSql,retTerm);
-//		}
-//		return (T)this;
-//	}
-//
-//	/**
-//	 *  检查当前sql，是否需要去掉and或or
-//	 * @return
-//	 */
-//	private StringBuffer delEndAndOr(StringBuffer sql2,String retTerm){
-//		String sql=sql2.toString();
-//		if(sql.equals("")){//sql为空
-//			sql2.append(retTerm);
-//			return sql2;
-//		}
-//
-//		if(Uitl.isEmpty(retTerm)){//去掉前面的链接符
-//			if(sql.endsWith("or")){//以or结尾
-//				sql=sql.substring(0, sql.length()-2);
-//			}else if(sql.endsWith("and")){//以and结尾
-//				sql=sql.substring(0, sql.length()-3);
-//			}
-//		}else{
-//			if(!sql.endsWith("or")&&!sql.endsWith("and")&&!sql.endsWith("(")){//没有任何连接符，默认and链接
-//				sql=sql+" and "+retTerm+" ";
-//			}else{
-//				sql=sql+"  "+retTerm+" ";
-//			}
-//		}
-//		sql2.setLength(0);
-//		sql2.append(sql);
-//		return sql2;
-//	}
-
-
 	/**
 	 * 	INSERT INTO 语句<br>
 	 *  组织插件语句<br>
@@ -1120,7 +924,7 @@ public class Sql<T extends Sql>{
 		if(Uitl.isEmpty(fromTableBuffer.toString())){
 			sql=updateSql.toString();
 		}else{
-			sql=" update  " +fromTableBuffer.toString()+" set "+updateSql.toString();
+			sql=" update  " + fromTableBuffer.toString()+" "+ getMainTableAsName()+" set "+updateSql.toString();
 		}
 
 		sql+=getWhereSql();
@@ -1156,9 +960,9 @@ public class Sql<T extends Sql>{
 			rSql=getWhereSql()+getOrderAndGroupSql();
 		}else{
 			if (DB_TYPE.equals(DLDbDialectType.MYSQL)){//mysql 下删除语法特殊处理
-				rSql+=" delete t1 from "+ fromTableBuffer.toString()+" ";		//from   表名
+				rSql+=" delete t1 from "+ fromTableBuffer.toString()+" "+ getMainTableAsName()+" ";		//from   表名
 			}else{
-				rSql+=" delete t1  from "+ fromTableBuffer.toString()+" ";		//from   表名
+				rSql+=" delete t1  from "+ fromTableBuffer.toString()+" "+ getMainTableAsName()+" ";		//from   表名
 			}
 			rSql+=getWhereSql();								//where
 			rSql+=getOrderAndGroupSql();								//order by 或 group by等
@@ -1273,32 +1077,6 @@ public class Sql<T extends Sql>{
 		return (T)this;
 	}
 
-
-
-
-
-//	/**
-//	 * 根据sql语句，判断是否需要增加groupBy语句
-//	 *
-//	 * @return
-//	 */
-//	public  T groupBy(String groupByHql){
-//		if(Uitl.isEmpty(groupByHql)){
-//			return (T)this;
-//		}
-//		if(!groupByHql.contains("group by")){
-//			this.groupSqlSql.append(" group by "+groupByHql);
-//		}else{
-//			if(groupByHql.trim().indexOf("group by")==0){
-//				this.groupSqlSql.append(groupByHql);
-//			}else{//在前面增加order by
-//				this.groupSqlSql.append(" group by "+groupByHql);
-//
-//			}
-//		}
-//		return (T)this;
-//	}
-
 	/**
 	 * 根据sql语句，判断是否需要增加groupBy语句
 	 *
@@ -1336,8 +1114,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T eq(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName,value,"="));
-
-//		 delEndAndOr(eqByType(propertyName,value,"="));
 		 return (T)this;
 	}
 	
@@ -1385,7 +1161,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T gt(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName,value,">"));
-//		 delEndAndOr(eqByType(propertyName,value,">"));
 		 return (T)this;
 	}
 	
@@ -1395,7 +1170,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T ne(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName, value, "<>"));
-//		 delEndAndOr(eqByType(propertyName, value, "<>"));
 		 return (T)this;
 	}
 	
@@ -1405,7 +1179,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T ge(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName, value, ">="));
-//		 delEndAndOr(eqByType(propertyName, value, ">="));
 		 return (T)this;
 	}
 	
@@ -1415,7 +1188,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T lt(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName, value, "<"));
-//		 delEndAndOr(eqByType(propertyName, value, "<"));
 		 return (T)this;
 	}
 	
@@ -1425,7 +1197,6 @@ public class Sql<T extends Sql>{
 	 */
 	public  T le(String propertyName,Object value){
 		addQueryItem(eqByType(propertyName, value, "<="));
-//		 delEndAndOr(eqByType(propertyName, value, "<="));
 		 return (T)this;
 	}
 	
@@ -1532,19 +1303,16 @@ public class Sql<T extends Sql>{
 			}
 		}
 		if(isNotNull)return (T)this;
-//		andAuto();
 		likeForMapByType(map,true);
 		return (T)this;
 	}
 
 	public  T likeForStartForMapAnd(Map<String, Object> map){
-//		andAuto();
 		likeForMapByType(map,true,0);
 		return (T)this;
 	}
 
 	public  T likeForEndForMapAnd(Map<String, Object> map){
-//		andAuto();
 		likeForMapByType(map,true,1);
 		return (T)this;
 	}
@@ -1568,19 +1336,16 @@ public class Sql<T extends Sql>{
 		}
 		if(isNotNull)return (T)this;
 
-//		andAuto();
 		likeForMapByType(map,false);
 		return (T)this;
 	}
 
 	public  T likeForStartForMap(Map<String, Object> map){
-//		andAuto();
 		likeForMapByType(map,false,0);
 		return (T)this;
 	}
 	
 	public  T likeForEndForMap(Map<String, Object> map){
-//		andAuto();
 		likeForMapByType(map,false,1);
 		return (T)this;
 	}
@@ -1619,7 +1384,6 @@ public class Sql<T extends Sql>{
 		}
 		
 		addQueryItem(unitFormatPropertyName(propertyName)+" in ("+retTerm+") ");
-//		delEndAndOr(unitFormatPropertyName(propertyName)+" in ("+retTerm+") ");
 		return (T)this;
 	}
 	
@@ -1671,7 +1435,6 @@ public class Sql<T extends Sql>{
 			return (T)this;
 		}
 		addQueryItem(unitFormatPropertyName(propertyName)+" is null ");
-//		delEndAndOr(unitFormatPropertyName(propertyName)+" is null ");
 		return (T)this;
 	}
 	
@@ -1684,7 +1447,6 @@ public class Sql<T extends Sql>{
 			return (T)this;
 		}
 		addQueryItem(unitFormatPropertyName(propertyName) +" is not null");
-//		delEndAndOr(unitFormatPropertyName(propertyName) +" is not null");
 		return (T)this;
 	}
 	
@@ -1714,8 +1476,6 @@ public class Sql<T extends Sql>{
 	
 	
 	
-	
-	
 	/**
 	 * 对应SQL的between子句  在lo和hi之间   包含lo和hi
 	 * 只填写lo，则变成>= 大于等于
@@ -1736,7 +1496,6 @@ public class Sql<T extends Sql>{
 		}
 
 		addQueryItem(unitFormatPropertyName(propertyName) + " between " + unitFormat(lo) + " and " + unitFormat(hi));
-//		delEndAndOr(unitFormatPropertyName(propertyName) + " between " + unitFormat(lo) + " and " + unitFormat(hi));
 		return (T)this;
 	}
 	
@@ -1749,7 +1508,6 @@ public class Sql<T extends Sql>{
 			return (T)this;
 		}
 		addQueryItem(unitFormatPropertyName(propertyName) + " not between " + unitFormat(lo) + " and " + unitFormat(hi));
-//		delEndAndOr(unitFormatPropertyName(propertyName) + " not between " + unitFormat(lo) + " and " + unitFormat(hi));
 		return (T)this;
 	}
 	
@@ -1790,8 +1548,7 @@ public class Sql<T extends Sql>{
 	public String toString() {
 		return " "+this.sql()+" ";
 	}
-	
-	
+
 	
 
 	public StringBuffer getOrderbySql() {
@@ -1859,78 +1616,6 @@ public class Sql<T extends Sql>{
 	 */
 	public static boolean isNotEmpty(Object pObj) {
 		return !isEmpty(pObj);
-	}
-
-
-
-	/**
-	 * @param args
-	 */
-	/**
-	 * @param args
-	 */
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		//sql.geti().where().eqMap().and().likeMap().or().orderby()
-		Map<String, Object> map =new HashMap<String, Object>();
-		String value="查询";
-		map.put("key1", value);
-		map.put("key2", value);
-
-//		System.out.println("------likeForMap-------");
-//		System.out.println(DlSqlUtil.getInstance().likeForMap(map).sqlAll());
-//		System.out.println("------eqForAll-------");
-//		System.out.println(DlSqlUtil.getInstance().eqForMap(map).sqlAll());
-//		
-//		System.out.println("------ge-------");
-//		System.out.println(DlSqlUtil.getInstance().ge("age",23).sqlAll());
-//		System.out.println("------between-------");
-//		System.out.println(DlSqlUtil.getInstance().setDbType(DialectType.MYSQL).between("age", UtilDateFormat.StoD("2015-07-09", "yyyy-MM-dd"), UtilDateFormat.StoD("2015-07-10", "yyyy-MM-dd")).sqlAll());
-//		
-//		System.out.println("------in-------");
-//		Integer[] ids={1,2,34,5,6,7};
-//		
-//		List aList= new ArrayList();
-//		aList.add(23);
-//		aList.add(444);
-//		aList.add(999);
-//		
-//		Object[] idss={"323",23,"333","444"};
-//		System.out.println(DlSqlUtil.getInstance().in("name", idss).orderBy(true,"id","name").sqlAll());
-		
-		
-//		Object[] idsObjects={1,2,34,5,"a",7};
-		System.out.println("-----------综合test-----------");
-		Sql sqlUtil= Sql.create();
-		sqlUtil
-					//.selectColumn("id,name,age")
-					//.fromTable("SysUser")
-					//.eqForMap(map)
-				   .likeForEndForMap(map)
-					//.in("age", idsObjects)
-					//.eq("kkk", new Date())
-					//.writeSqlByWhere("1=1  and 2!=2")
-					//.orderBy(true,"id","name","age")
-					;
-		List param=sqlUtil.paramList();
-		Object[] arrs=sqlUtil.paramArrs();
-		System.out.println(sqlUtil.sql());
-		System.out.println(sqlUtil.sqlAll());
-		
-//		System.out.println("-----------防注入-----------");
-//		map.clear();
-//		map.put("name", "系统管理员' and pas='0cd7730fbf6d36059ccc687b43b1ef56");
-//		System.out.println(
-//				DlSqlUtil.getInstance().selectColumn("id,name,age").fromTable("sys_user")
-//				.eqForMap(map)
-//				//.likeForMap(map)
-//				//.in("age", idsObjects)
-//				//.writeSqlByWhere("1=1  and 2!=2")
-//				//.orderBy(true,"id","name","age")
-//				.sqlAll()
-//		);
 	}
 
 }
