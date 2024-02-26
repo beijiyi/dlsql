@@ -347,8 +347,8 @@ private T writeSql(String sql);
 1. public StringBuffer getSelectColumnBuffer();    
 获取选择列的StringBuffer。
 1. public StringBuffer getFromTableBuffer();    
-- 获取FROM子句的StringBuffer。
+获取FROM子句的StringBuffer。
 1. public static boolean isEmpty(Object pObj);    
-- 检查对象是否为空，包括null、空字符串、空集合、空Map或空数组。
-1. public static boolean isNotEmpty(Object pObj);    
-- 检查对象是否非空，与isEmpty方法相反。
+检查对象是否为空，包括null、空字符串、空集合、空Map或空数组。
+1. public static boolean isNotEmpty(Object pObj);  
+检查对象是否非空，与isEmpty方法相反。
